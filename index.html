@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IIRS Project</title>
+  
+  <!--This CSS Organises the tiles Displayed on the Screen, in the proper order
+	without this the tiles gets distorted-->
+  <link rel="stylesheet" href="leaflet.css" />
+  
+  <link rel="stylesheet" href="app.css" />
+  <script src="leaflet.js"></script>
+  <script src="leaflet-geopackage.min.js"></script>
+  <script src="jquery-1.6.1.min.js"></script>    
+    
+  <!--The HORIZONTAL BAR CONTROL IS IN THESE TWO CODES :: Though both are kept in the different folder and come from different sources they work on the same icons-->
+  
+  <!--This one keeps the horizontal icons horizontally -->
+   <!--But When This is used in the present project, it is distorting layout of the onClick information of POIs-->
+  <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">  
+ <!-- The following CSS call the image and iconn, to display on the map-->
+ <!-- Below One when added spoiled the loading of the tiles on browser, and reduced the UX on emulator -->
+ 
+  <link rel="stylesheet" href="vendor/font-awesome-4.3.0/css/font-awesome.min.css" />
+  
+  <!--THE CLOSE OF THE HORIZONTAL BAR THAT APPEARS ON THE MAP-->    
+   <link rel="stylesheet" href="vendor/leaflet-0.7.2/leaflet.css" />  
+  <link rel="stylesheet" href="vendor/leaflet-0.7.2/leaflet.awesomemarkers/leaflet.awesome-markers.css">
+  <link rel="stylesheet" href="css/style.css">
+    
+  <script>
+        jQuery(window).ready(function(){
+            jQuery("#btnInit").click(initiate_geolocation);
+		}); 
+        function initiate_geolocation() {
+            navigator.geolocation.getCurrentPosition(handle_geolocation_query, displayError,{maxAge:50000, enableHighAccuracy:true, timeout:6000});
+        } 
+        function handle_geolocation_query(position){
+            alert('Lat: ' + position.coords.latitude + ' ' +
+                  'Lon: ' + position.coords.longitude);
+        }
+		function displayError(err){
+			var errors={
+				1: 'Permissoin Denied',
+				2: 'Position Unavailable',
+				3: 'Request Timeout'
+			};
+			alert("Error : " +errors[error.code]);		
+		}		
+    </script>	
+</head>
+<body ng-controller="AppCtrl">
+	  <div id="group">
+    <div class="btn-group">
+	
+	<!--This Button will be for In short App Description -->
+     <!-- <div class="btn btn-default" id="info" type="button" ng-click="toggleInfo()" ngm-tap="toggleInfo()">
+        <i class="fa fa-question fa-lg"></i>
+      </div>-->
+	 <!--This Button will be for Getting the GeoLocation on the MAP --> 
+      <div class="btn btn-default" id="geolocate" ng-click="getLocation()" ngm-tap="getLocation()">
+        <i class="fa fa-location-arrow fa-lg"></i>
+      </div>
+	  <!--This can be another button If Necessary-->
+<!--    <div class="btn btn-default" id="export" ng-click="exportPoints()" ngm-tap="exportPoints()">
+        <i class="fa fa-share-square-o fa-lg"></i>
+      </div>-->
+    
+	  <!--Fourth Button for Adding Data that puts icon on map, text-box, save and Cancel buttong -->
+    
+	 <!-- <div class="btn btn-success" id="new" type="button" ng-click="createNewLocation()" ng-disabled="newLocation.geometry" ngm-tap="createNewLocation()">
+        <i class="fa fa-plus fa-lg"></i>
+      </div>-->
+    </div>
+
+    <div id="new-location-controls" ng-cloak ng-if="showControls">
+      <textarea rows="1" ng-model="newLocation.properties.text" placeholder="Description"></textarea>
+		<div>
+        <div class="btn btn-danger" ng-click="cancel()" ngm-tap="cancel()">Cancel</div>
+        <div class="btn btn-info" ng-click="saveLocation()" ngm-tap="saveLocation()">Search</div>
+      </div>
+    </div>
+
+    <div id="delete" class="btn btn-danger" type="button" ng-cloak ng-if="deleteButtonVisible" ng-click="deleteLocation()" ngm-tap="deleteLocation()">
+      <span class="glyphicon glyphicon-trash"></span>
+    </div>
+  </div>
+  
+  
+   <div id="status-window" ng-cloak ng-if="statusText" ng-click="dismissNotification()" ngm-tap="dismissNotification()">
+    <p>{{statusText}}</p>
+    <small class="lighter">tap to dismiss</small>
+  </div>
+  
+   <div id="map-info" ng-cloak ng-if="showInfo" ng-click="toggleInfo()" ngm-tap="toggleInfo()">
+    <h3>This Time for Dehradun</h3>
+    <p><span class="help-icon"><i class="fa fa-location-arrow"></i></span> Tap the geolocate button to show your location on the map.</p>
+    <p><span class="help-icon"><i class="fa fa-question"></i></span> Tap to show or dismiss this help window.</p>
+    <p><small>Data used to create this map comes from openstreetmap.org</small></p>
+    <small class="lighter">Tap to dismiss</small>
+  </div>
+ 
+   	<div id="map">
+	<!--<div id="map" class="map">-->
+		<div leaflet new-location="newLocation" locations="locations" lat="lat" lon="lon" 
+       		center="center" show-controls="showControls" delete-button-visible="deleteButtonVisible" 
+       		active-location="activeLocation" did-geolocate="didGeolocate" status-text="statusText">
+		</div>
+	</div>
+  		
+ <!-- <button id="btnInit" >Find my location</button>--> <!-- INSTEAD OF BUTTON EVENT CAN YOU MAKE ONLOAD EVENT? -->
+  <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+  <!-- Taken Later for testing -->
+  <script src="vendor/angular.js"></script>
+  
+</body>
+</html>
